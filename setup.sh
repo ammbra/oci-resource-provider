@@ -1,52 +1,39 @@
-# clone the git repo
-git clone
-
-#install pulumi
-curl -fsSL https://get.pulumi.com | sh
-
-#create a local state file directory
-mkdir oci-stack-statefile
-pulumi login file://oci-stack-statefile
-
-#pulumi stack select
-pulumi stack select prod
-
 read -p "Enter your name : " name
 echo "Hi, $name. Let us be friends!"
 
-read -p "Please provide your OCI region: " oci_region
+read -p "Please provide your OCI region: "  -n 1 -r
 echo    # (optional) move to a new line
-if [[  -z  "$oci_region" ]]
+if [[  -z  "$REPLY" ]]
 then
-pulumi config set oci:region $oci_region
+pulumi config set oci:region $REPLY
 fi
 
-read -p "Please provide your tenancy OCID: " tenancyOcid
+read -p "Please provide your tenancy OCID: "  -n 1 -r
 echo    # (optional) move to a new line
-if [[  -z  "$tenancyOcid" ]]
+if [[  -z  "$REPLY" ]]
 then
-pulumi config set oci:tenancyOcid $tenancyOcid --secret
+pulumi config set oci:tenancyOcid $REPLY --secret
 fi
 
-read -p "Please provide your userOcid: " userOcid
+read -p "Please provide your userOcid: "  -n 1 -r
 echo    # (optional) move to a new line
-if [[  -z  "$userOcid" ]]
+if [[  -z  "$REPLY" ]]
 then
 pulumi config set oci:userOcid  --secret
 fi
 
-read -p "Please provide your oci fingerprint: " oci_fingerprint
+read -p "Please provide your oci fingerprint: "  -n 1 -r
 echo    # (optional) move to a new line
-if [[  -z  "$oci_fingerprint" ]]
+if [[  -z  "$REPLY" ]]
 then
-pulumi config set oci:fingerprint $oci_fingerprint --secret
+pulumi config set oci:fingerprint $REPLY --secret
 fi
 
-read -p "Please provide parent compartment ocid: " compartment_ocid
+read -p "Please provide parent compartment ocid: "  -n 1 -r
 echo    # (optional) move to a new line
-if [[  -z  "$compartment_ocid" ]]
+if [[  -z  "$REPLY" ]]
 then
-pulumi config set compartment_ocid $compartment_ocid
+pulumi config set compartment_ocid $REPLY
 fi
 
 echo "Create cloudkey ssh keys at ~/.ssh"
@@ -56,11 +43,11 @@ ls ~/.ssh
 cat ~/.ssh/cloudkey.pub | pulumi config set sshKey
 pulumi config set compartment_ocid ~/.ssh/cloudkey
 
-
-read -p "Please provide the number of compute instances to create: " amount_vm
+pulumi preview
+pulumi up
+read -p "Please provide the number of compute instances to create: " -n 1 -r
 echo    # (optional) move to a new line
-if [[  -z  "$amount_vm" ]]
+if [[  -z  "$REPLY" ]]
 then
-pulumi config set amount_vm $amount_vm
+pulumi config set amount_vm $REPLY
 fi
-
