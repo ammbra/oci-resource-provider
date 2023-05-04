@@ -1,0 +1,3 @@
+name: oci-resource-provider
+runtime: java
+description: A project to quickly setup a number of VMs on OCI and get their login.
